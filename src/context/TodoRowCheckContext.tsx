@@ -6,15 +6,18 @@ import {
   useState,
 } from 'react'
 import { useFilterTodo } from '@/hooks'
+import { useTodoActionContext } from '@/server/context'
 
 interface TodoRowCheck {
   checkTodo: (id: number) => void
   checkAllTodo: () => void
+  deleteTodos: () => Promise<void>
 }
 
 const initialActionState = {
   checkTodo: () => undefined,
   checkAllTodo: () => undefined,
+  deleteTodos: () => undefined as unknown as Promise<void>,
 }
 
 const TodoRowCheckContext = createContext<number[]>([])
@@ -22,6 +25,7 @@ const TodoRowCheckActionContext =
   createContext<TodoRowCheck>(initialActionState)
 
 export const TodoRowCheckProvider = ({ children }: PropsWithChildren) => {
+  const { deleteTodo } = useTodoActionContext()
   const { todos } = useFilterTodo()
   const [todoIds, setTodoIds] = useState<number[]>([])
 
@@ -42,8 +46,16 @@ export const TodoRowCheckProvider = ({ children }: PropsWithChildren) => {
     setTodoIds(ids)
   }, [todos, todoIds.length])
 
+  const deleteTodos = useCallback(async () => {
+    const todoDeleteRequests = todoIds.map((id) => () => deleteTodo(id))
+    await Promise.all(todoDeleteRequests.map((request) => request()))
+    setTodoIds([])
+  }, [deleteTodo, todoIds])
+
   return (
-    <TodoRowCheckActionContext.Provider value={{ checkTodo, checkAllTodo }}>
+    <TodoRowCheckActionContext.Provider
+      value={{ checkTodo, checkAllTodo, deleteTodos }}
+    >
       <TodoRowCheckContext.Provider value={todoIds}>
         {children}
       </TodoRowCheckContext.Provider>

@@ -23,7 +23,7 @@ export const TodoList = () => {
             <Table.TableHead className="w-[24px]">
               <Checkbox
                 className="w-[24px] h-[24px]"
-                checked={todos.length === todoIds.length}
+                checked={todoIds.length > 0 && todos.length === todoIds.length}
                 onClick={checkAllTodo}
               />
             </Table.TableHead>
