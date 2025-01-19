@@ -121,7 +121,7 @@ const UpdateTodoForm = ({ id, closeDialog }: UpdateTodoFormProps) => {
         <div className="flex gap-x-[20px] items-center">
           <p className="shrink-0 w-[100px]">Todo</p>
           <Input
-            value={payload.text === null ? todo?.text : payload?.text}
+            value={payload.text === null ? todo?.text ?? '' : payload?.text}
             onChange={onChangeText}
             placeholder="Enter your todo..."
             className="h-[48px]"

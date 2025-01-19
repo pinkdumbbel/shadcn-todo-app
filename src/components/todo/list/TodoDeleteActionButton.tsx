@@ -20,7 +20,7 @@ export const TodoDeleteActionButton = ({ id }: TodoDeleteActionButtonProps) => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
+      <AlertDialogTrigger asChild>
         <button className="w-[200px] h-[40px] text-left px-[12px] hover:bg-gray-50">
           삭제
         </button>
