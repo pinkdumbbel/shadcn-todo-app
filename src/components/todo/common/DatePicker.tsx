@@ -4,7 +4,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { cn } from '@/lib/utils'
+import { cn, yyyymmdd, yyyymmddRange } from '@/lib/utils'
 import { Calendar as CalendarIcon } from 'lucide-react'
 import { PropsWithChildren } from 'react'
 import { DateRange } from 'react-day-picker'
@@ -29,10 +29,16 @@ export const DatePicker = ({
         )}
       >
         <CalendarIcon className="mr-2 h-4 w-4" />
-        {date ? date.toString() : <span>{placeholder}</span>}
+        {date ? formatDate(date) : <span>{placeholder}</span>}
       </Button>
     </PopoverTrigger>
 
     <PopoverContent className="w-auto p-0">{children}</PopoverContent>
   </Popover>
 )
+
+const isDateRange = (date: unknown): date is DateRange =>
+  date !== null && typeof date === 'object' && 'from' in date && 'to' in date
+
+const formatDate = (date: DatePickerProps['date']): string =>
+  isDateRange(date) ? yyyymmddRange(date) : yyyymmdd(date)
