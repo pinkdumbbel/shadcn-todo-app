@@ -1,34 +1,44 @@
 import { Input } from '@/components/ui/input'
-
-import { Checkbox } from '@/components/ui/checkbox'
-import { DatePicker } from '../common'
-import { Calendar } from '@/components/ui/calendar'
 import { useState } from 'react'
-import { DateRange } from 'react-day-picker'
+import { useFilterTodosActionContext } from '@/context'
 
 export const TodSearchFilter = () => {
-  const [date, setDate] = useState<DateRange>()
+  const { filterByText } = useFilterTodosActionContext()
+  const [text, setText] = useState('')
+
+  const onChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target
+    setText(value)
+    filterByText(value)
+  }
 
   return (
     <section className="flex items-center gap-x-[12px] mt-[40px]">
-      <Input placeholder="Filter todos..." className="w-[480px] h-[48px]" />
+      <Input
+        value={text}
+        placeholder="Filter todos..."
+        className="w-[480px] h-[48px]"
+        onChange={onChangeText}
+      />
 
-      <DatePicker placeholder="Filter deadline...">
-        <Calendar
-          initialFocus
-          mode="range"
-          defaultMonth={date?.from}
-          selected={date}
-          onSelect={setDate}
-          numberOfMonths={2}
-        />
-      </DatePicker>
+      {/* <div className="w-[300px]">
+        <DatePicker placeholder="Filter deadline...">
+          <Calendar
+            initialFocus
+            mode="range"
+            defaultMonth={date?.from}
+            selected={date}
+            onSelect={setDate}
+            numberOfMonths={2}
+          />
+        </DatePicker>
+      </div>
 
-      <Checkbox id="completed" className="w-[24px] h-[24px]" />
+      <Checkbox id="done" className="w-[24px] h-[24px]" />
 
-      <label htmlFor="completed" className="text-[16px] text-gray-700">
-        Completed
-      </label>
+      <label htmlFor="done" className="text-[16px] text-gray-700">
+        Done
+      </label> */}
     </section>
   )
 }
