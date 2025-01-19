@@ -7,6 +7,7 @@ import { PopoverContent } from '@radix-ui/react-popover'
 import { EllipsisVertical } from 'lucide-react'
 import { TodoUpdateDialog } from './TodoUpdateDialog'
 import { memo } from 'react'
+import { TodoDeleteActionButton } from './TodoDeleteActionButton'
 
 export const TodoList = () => {
   const { filteredTodos } = useFilteredTodosContext()
@@ -65,9 +66,7 @@ const ShowMoreButton = memo(({ id }: { id: number }) => {
             <TodoUpdateDialog id={id} />
           </li>
           <li>
-            <button className="w-[200px] h-[40px] text-left px-[12px] hover:bg-gray-50">
-              삭제
-            </button>
+            <TodoDeleteActionButton id={id} />
           </li>
         </ul>
       </PopoverContent>
