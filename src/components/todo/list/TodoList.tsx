@@ -8,9 +8,12 @@ import { TodoUpdateDialog } from './TodoUpdateDialog'
 import { memo } from 'react'
 import { TodoDeleteActionButton } from './TodoDeleteActionButton'
 import { useFilterTodo } from '@/hooks'
+import { useTodoRowCheckActionContext, useTodoRowCheckContext } from '@/context'
 
 export const TodoList = () => {
   const { todos } = useFilterTodo()
+  const todoIds = useTodoRowCheckContext()
+  const { checkAllTodo, checkTodo } = useTodoRowCheckActionContext()
 
   return (
     <section className="mt-[20px] border-[1px] border-solid border-gray-300 rounded-lg">
@@ -18,7 +21,11 @@ export const TodoList = () => {
         <Table.TableHeader>
           <Table.TableRow className="hover:bg-transparent">
             <Table.TableHead className="w-[24px]">
-              <Checkbox className="w-[24px] h-[24px]" />
+              <Checkbox
+                className="w-[24px] h-[24px]"
+                checked={todos.length === todoIds.length}
+                onClick={checkAllTodo}
+              />
             </Table.TableHead>
             <Table.TableHead className="text-[20px]">Todo</Table.TableHead>
             <Table.TableHead className="text-[20px]">Deadline</Table.TableHead>
@@ -30,7 +37,11 @@ export const TodoList = () => {
           {todos.map((todo) => (
             <Table.TableRow key={todo.id}>
               <Table.TableCell>
-                <Checkbox className="w-[24px] h-[24px]" />
+                <Checkbox
+                  className="w-[24px] h-[24px]"
+                  checked={todoIds.includes(todo.id)}
+                  onClick={() => checkTodo(todo.id)}
+                />
               </Table.TableCell>
               <Table.TableCell className="max-w-[500px] truncate text-[16px] font-medium text-gray-700 ">
                 {todo.text}({todo.id})
