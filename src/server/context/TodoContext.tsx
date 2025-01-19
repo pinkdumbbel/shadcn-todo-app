@@ -7,15 +7,16 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { createTodo, getTodos } from '../fetch'
+import { createTodo, getTodos, updateTodo as updateTodoRequest } from '../fetch'
 import { ToDoPayload } from '@/types/todo'
 
 interface TodoActionContextValue {
   addTodo: (payload: ToDoPayload) => void
+  updateTodo: (payload: ToDo) => Promise<ToDo>
 }
-
 const TodoActionContext = createContext<TodoActionContextValue>({
   addTodo: () => undefined,
+  updateTodo: () => ({} as Promise<ToDo>),
 })
 
 const TodoContext = createContext<ToDo[]>([])
@@ -36,12 +37,20 @@ export const TodoProvider = ({ children }: PropsWithChildren) => {
     setTodos((prevTodos) => [...prevTodos, newTodo])
   }
 
+  const updateTodo = async (payload: ToDo): Promise<ToDo> => {
+    const updatedTodo = await updateTodoRequest(payload)
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo))
+    )
+    return updatedTodo
+  }
+
   useEffect(() => {
     fetchTodos()
   }, [fetchTodos])
 
   return (
-    <TodoActionContext.Provider value={{ addTodo }}>
+    <TodoActionContext.Provider value={{ addTodo, updateTodo }}>
       <TodoContext.Provider value={todos}>{children}</TodoContext.Provider>
     </TodoActionContext.Provider>
   )

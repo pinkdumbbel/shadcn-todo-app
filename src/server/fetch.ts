@@ -10,7 +10,9 @@ export const getTodos = async (): Promise<ToDo[]> => {
 
 export const getTodoById = async (id: number): Promise<ToDo> => {
   const response = await fetch(`${endpoint}/${id}`)
-  return response.json()
+  const { data }: APIResponse<ToDo> = await response.json()
+
+  return data as ToDo
 }
 
 export const createTodo = async (todo: ToDoRequest): Promise<ToDo> => {
@@ -38,7 +40,11 @@ export const updateTodo = async ({ id, ...payload }: ToDo): Promise<ToDo> => {
     body: JSON.stringify(payload),
   })
 
-  return response.json()
+  const { data }: APIResponse<ToDo> = await response.json()
+
+  if (!data) throw new Error()
+
+  return data
 }
 
 export const deleteTodo = async (id: number): Promise<void> => {

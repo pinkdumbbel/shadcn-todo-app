@@ -1,7 +1,12 @@
 import { Checkbox } from '@/components/ui/checkbox'
+import { Popover, PopoverTrigger } from '@/components/ui/popover'
 import * as Table from '@/components/ui/table'
 import { useFilteredTodosContext } from '@/context'
 import { yyyymmddMs } from '@/lib/utils'
+import { PopoverContent } from '@radix-ui/react-popover'
+import { EllipsisVertical } from 'lucide-react'
+import { TodoUpdateDialog } from './TodoUpdateDialog'
+import { memo } from 'react'
 
 export const TodoList = () => {
   const { filteredTodos } = useFilteredTodosContext()
@@ -35,6 +40,9 @@ export const TodoList = () => {
               <Table.TableCell className="w-[10%] text-[16px] font-medium text-gray-700">
                 {todo.done ? 'Y' : 'N'}
               </Table.TableCell>
+              <Table.TableCell className="w-0">
+                <ShowMoreButton id={todo.id} />
+              </Table.TableCell>
             </Table.TableRow>
           ))}
         </Table.TableBody>
@@ -42,3 +50,27 @@ export const TodoList = () => {
     </section>
   )
 }
+
+const ShowMoreButton = memo(({ id }: { id: number }) => {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <button>
+          <EllipsisVertical />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent className="bg-white ">
+        <ul className="border-2 border-solid border-gray-100">
+          <li className="border-b-2 border-solid border-gray-100">
+            <TodoUpdateDialog id={id} />
+          </li>
+          <li>
+            <button className="w-[200px] h-[40px] text-left px-[12px] hover:bg-gray-50">
+              삭제
+            </button>
+          </li>
+        </ul>
+      </PopoverContent>
+    </Popover>
+  )
+})
