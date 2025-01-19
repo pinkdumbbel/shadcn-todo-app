@@ -1,9 +1,10 @@
 import { Checkbox } from '@/components/ui/checkbox'
 import * as Table from '@/components/ui/table'
+import { yyyymmddMs } from '@/lib/utils'
 import { useTodoContext } from '@/server/context'
 
 export const TodoList = () => {
-  const { todos } = useTodoContext()
+  const todos = useTodoContext()
 
   return (
     <section className="mt-[20px] border-[1px] border-solid border-gray-300 rounded-lg">
@@ -29,7 +30,7 @@ export const TodoList = () => {
                 {todo.text}
               </Table.TableCell>
               <Table.TableCell className="w-[20%] text-[16px] font-medium text-gray-700">
-                {todo.deadline}
+                {yyyymmddMs(todo.deadline)}
               </Table.TableCell>
               <Table.TableCell className="w-[10%] text-[16px] font-medium text-gray-700">
                 {todo.done ? 'Y' : 'N'}

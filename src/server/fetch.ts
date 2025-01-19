@@ -1,4 +1,4 @@
-import { APIResponse, ToDo } from '@/types/api'
+import { APIResponse, ToDo, ToDoRequest } from '@/types/api'
 
 const endpoint = '/api/todos'
 
@@ -13,7 +13,7 @@ export const getTodoById = async (id: number): Promise<ToDo> => {
   return response.json()
 }
 
-export const createTodo = async (todo: ToDo): Promise<ToDo> => {
+export const createTodo = async (todo: ToDoRequest): Promise<ToDo> => {
   const response = await fetch(endpoint, {
     method: 'POST',
     headers: {
@@ -21,7 +21,12 @@ export const createTodo = async (todo: ToDo): Promise<ToDo> => {
     },
     body: JSON.stringify(todo),
   })
-  return response.json()
+
+  const { data }: APIResponse<ToDo> = await response.json()
+
+  if (!data) throw new Error()
+
+  return data
 }
 
 export const updateTodo = async ({ id, ...payload }: ToDo): Promise<ToDo> => {

@@ -10,10 +10,14 @@ import {
 import { Input } from '@/components/ui/input'
 import { DatePicker } from '../common'
 import { Calendar } from '@/components/ui/calendar'
+import { FormEvent, useState } from 'react'
+import { useTodoActionContext } from '@/server/context'
 
 export const AddTodoDialog = () => {
+  const [open, setOpen] = useState<boolean>(false)
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           size="lg"
@@ -29,39 +33,70 @@ export const AddTodoDialog = () => {
           <DialogTitle className="text-3xl">Add Todo</DialogTitle>
         </DialogHeader>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault()
-            console.log('submit')
-          }}
-          className="space-y-[40px] mt-[40px]"
-        >
-          <div className="space-y-[24px]">
-            <div className="flex gap-x-[20px] items-center">
-              <p className="shrink-0 w-[100px]">Todo</p>
-              <Input placeholder="Enter your todo..." className="h-[48px]" />
-            </div>
-            <div className="flex gap-x-[20px] items-center">
-              <p className="shrink-0 w-[100px]">Deadline</p>
-              <div className="w-[280px]">
-                <DatePicker placeholder="Enter deadline...">
-                  <Calendar mode="single" />
-                </DatePicker>
-              </div>
-            </div>
-          </div>
-
-          <DialogFooter>
-            <Button
-              type="submit"
-              className="bg-blue-700 text-lg hover:bg-blue-700/90"
-              size="lg"
-            >
-              Add
-            </Button>
-          </DialogFooter>
-        </form>
+        <AddTodoForm closeDialog={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
+  )
+}
+
+interface AddTodoFormProps {
+  closeDialog: () => void
+}
+
+const AddTodoForm = ({ closeDialog }: AddTodoFormProps) => {
+  const { addTodo } = useTodoActionContext()
+  const [text, setText] = useState<string>('')
+  const [deadline, setDeadline] = useState<Date>()
+
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    if (!text || !deadline) return
+
+    await addTodo({
+      text,
+      deadline: deadline.getTime(),
+    })
+    closeDialog()
+  }
+
+  return (
+    <form onSubmit={onSubmit} className="space-y-[40px] mt-[40px]">
+      <div className="space-y-[24px]">
+        <div className="flex gap-x-[20px] items-center">
+          <p className="shrink-0 w-[100px]">Todo</p>
+          <Input
+            value={text}
+            placeholder="Enter your todo..."
+            className="h-[48px]"
+            onChange={(e) => {
+              setText(e.target.value)
+            }}
+          />
+        </div>
+        <div className="flex gap-x-[20px] items-center">
+          <p className="shrink-0 w-[100px]">Deadline</p>
+          <div className="w-[280px]">
+            <DatePicker date={deadline} placeholder="Enter deadline...">
+              <Calendar
+                mode="single"
+                selected={deadline}
+                onSelect={setDeadline}
+              />
+            </DatePicker>
+          </div>
+        </div>
+      </div>
+
+      <DialogFooter>
+        <Button
+          type="submit"
+          className="bg-blue-700 text-lg hover:bg-blue-700/90"
+          size="lg"
+        >
+          Add
+        </Button>
+      </DialogFooter>
+    </form>
   )
 }
