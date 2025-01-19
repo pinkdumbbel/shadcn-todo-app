@@ -1,12 +1,10 @@
 import { useTodoContext } from '@/server/context'
-import { ToDo } from '@/types/api'
 import {
   createContext,
   PropsWithChildren,
   startTransition,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
 } from 'react'
@@ -14,10 +12,6 @@ import {
 interface Pagination {
   size: number
   pageIndex: number
-  hasPrevPage: boolean
-  hasNextPage: boolean
-  isFirstPage: boolean
-  isLastPage: boolean
 }
 
 interface PaginationAction {
@@ -35,10 +29,6 @@ interface SearchFilterAction {
 const initialState = {
   size: 10,
   pageIndex: 0,
-  hasPrevPage: false,
-  hasNextPage: false,
-  isFirstPage: false,
-  isLastPage: false,
 }
 
 const initialActionState = {
@@ -53,9 +43,9 @@ const initialSearchFilterActionState = {
   filterByText: () => undefined,
 }
 
-const PaginatedTodosContext = createContext<ToDo[]>([])
-const TodoPaginationContext = createContext<Pagination>({
+const TodoPaginationContext = createContext<Pagination & { text: string }>({
   ...initialState,
+  text: '',
 })
 const TodoPaginationActionContext = createContext<
   PaginationAction & SearchFilterAction
@@ -63,14 +53,14 @@ const TodoPaginationActionContext = createContext<
 
 export const TodoFilterProvider = ({ children }: PropsWithChildren) => {
   const todos = useTodoContext()
-  const [filteredTodos, setFilteredTodos] = useState<ToDo[]>([])
+
   const [pagination, setPagination] = useState<Pagination>(initialState)
-  const [searchFilter, setSearchFilter] = useState<string>('')
+  const [searchText, setSearchFilter] = useState<string>('')
 
   const filterByText = (text: string) => {
     setSearchFilter(text)
     startTransition(() => {
-      localStorage.setItem('searchFilter', JSON.stringify(text))
+      localStorage.setItem('searchText', text)
     })
   }
 
@@ -136,46 +126,18 @@ export const TodoFilterProvider = ({ children }: PropsWithChildren) => {
     [moveFirstPage, moveLastPage, updateSize]
   )
 
-  useEffect(() => {
-    const { pageIndex, size } = pagination
-
-    const pageCnt = pageIndex * size
-
-    setFilteredTodos(
-      todos
-        .slice(pageCnt, pageCnt + size)
-        .filter(({ text }) => text.includes(searchFilter))
-    )
-
-    setPagination((prev) => ({
-      ...prev,
-      hasPrevPage: pageIndex > 0,
-      hasNextPage: pageIndex * prev.size + prev.size < todos.length,
-      isFirstPage: !pageIndex,
-      isLastPage: pageIndex * prev.size + prev.size >= todos.length,
-    }))
-  }, [todos, pagination, searchFilter])
-
   return (
     <TodoPaginationActionContext.Provider value={filter}>
-      <TodoPaginationContext.Provider value={pagination}>
-        <PaginatedTodosContext.Provider value={filteredTodos}>
-          {children}
-        </PaginatedTodosContext.Provider>
+      <TodoPaginationContext.Provider
+        value={{ ...pagination, text: searchText }}
+      >
+        {children}
       </TodoPaginationContext.Provider>
     </TodoPaginationActionContext.Provider>
   )
 }
 
-export const useFilteredTodosContext = () => {
-  const filteredTodos = useContext(PaginatedTodosContext)
-  const pagination = useContext(TodoPaginationContext)
-
-  return {
-    filteredTodos,
-    ...pagination,
-  }
-}
+export const useFilteredTodosContext = () => useContext(TodoPaginationContext)
 
 export const useFilterTodosActionContext = () =>
   useContext(TodoPaginationActionContext)

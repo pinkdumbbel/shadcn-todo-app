@@ -8,16 +8,14 @@ interface TodoPaginationItemProps
 export const TodoPaginationItem = ({
   children,
   ...props
-}: PropsWithChildren<TodoPaginationItemProps>) => {
-  return (
-    <PaginationItem>
-      <Button
-        {...props}
-        size="icon"
-        className="bg-white border-[1px] border-solid border-gray-500 hover:bg-gray-100"
-      >
-        {children}
-      </Button>
-    </PaginationItem>
-  )
-}
+}: PropsWithChildren<TodoPaginationItemProps>) => (
+  <PaginationItem>
+    <Button
+      {...props}
+      size="icon"
+      className="bg-white border-[1px] border-solid border-gray-500 hover:bg-gray-100"
+    >
+      {children}
+    </Button>
+  </PaginationItem>
+)

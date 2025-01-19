@@ -1,16 +1,16 @@
 import { Checkbox } from '@/components/ui/checkbox'
 import { Popover, PopoverTrigger } from '@/components/ui/popover'
 import * as Table from '@/components/ui/table'
-import { useFilteredTodosContext } from '@/context'
 import { yyyymmddMs } from '@/lib/utils'
 import { PopoverContent } from '@radix-ui/react-popover'
 import { EllipsisVertical } from 'lucide-react'
 import { TodoUpdateDialog } from './TodoUpdateDialog'
 import { memo } from 'react'
 import { TodoDeleteActionButton } from './TodoDeleteActionButton'
+import { useFilterTodo } from '@/hooks'
 
 export const TodoList = () => {
-  const { filteredTodos } = useFilteredTodosContext()
+  const { todos } = useFilterTodo()
 
   return (
     <section className="mt-[20px] border-[1px] border-solid border-gray-300 rounded-lg">
@@ -27,7 +27,7 @@ export const TodoList = () => {
         </Table.TableHeader>
 
         <Table.TableBody>
-          {filteredTodos.map((todo) => (
+          {todos.map((todo) => (
             <Table.TableRow key={todo.id}>
               <Table.TableCell>
                 <Checkbox className="w-[24px] h-[24px]" />

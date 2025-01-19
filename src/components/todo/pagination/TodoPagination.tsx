@@ -2,14 +2,16 @@ import * as Pagination from '@/components/ui/pagination'
 import { TodoPaginationSizeSelect } from './TodoPaginationSizeSelect'
 import { useFilteredTodosContext } from '@/context'
 import { TodoPaginationActionButtons } from './TodoPaginationActionButtons'
+import { useFilterTodo } from '@/hooks'
 
 export const TodoPagination = () => {
-  const { filteredTodos, pageIndex } = useFilteredTodosContext()
+  const { pageIndex } = useFilteredTodosContext()
+  const { todos } = useFilterTodo()
 
   return (
     <Pagination.Pagination className="mt-[20px] justify-between items-center">
       <span className="text-[16px] text-gray-400 font-light">
-        0 of {filteredTodos.length} row(s) selected.
+        0 of {todos.length} row(s) selected.
       </span>
 
       <Pagination.PaginationContent className="gap-x-[32px]">
