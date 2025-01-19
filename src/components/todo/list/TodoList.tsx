@@ -1,10 +1,10 @@
 import { Checkbox } from '@/components/ui/checkbox'
 import * as Table from '@/components/ui/table'
+import { useFilteredTodosContext } from '@/context'
 import { yyyymmddMs } from '@/lib/utils'
-import { useTodoContext } from '@/server/context'
 
 export const TodoList = () => {
-  const todos = useTodoContext()
+  const { filteredTodos } = useFilteredTodosContext()
 
   return (
     <section className="mt-[20px] border-[1px] border-solid border-gray-300 rounded-lg">
@@ -21,13 +21,13 @@ export const TodoList = () => {
         </Table.TableHeader>
 
         <Table.TableBody>
-          {todos.map((todo) => (
+          {filteredTodos.map((todo) => (
             <Table.TableRow key={todo.id}>
               <Table.TableCell>
                 <Checkbox className="w-[24px] h-[24px]" />
               </Table.TableCell>
               <Table.TableCell className="max-w-[500px] truncate text-[16px] font-medium text-gray-700 ">
-                {todo.text}
+                {todo.text}({todo.id})
               </Table.TableCell>
               <Table.TableCell className="w-[20%] text-[16px] font-medium text-gray-700">
                 {yyyymmddMs(todo.deadline)}
