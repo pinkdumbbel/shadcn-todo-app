@@ -1,4 +1,3 @@
-import { getSearchFilterFromStorage } from '@/lib/storage'
 import { useTodoContext } from '@/server/context'
 import {
   createContext,
@@ -22,10 +21,6 @@ interface PaginationAction {
   moveLastPage: () => void
 }
 
-interface SearchFilterAction {
-  filterByText: (text: string) => void
-}
-
 const initialState = {
   size: 10,
   pageIndex: 0,
@@ -39,30 +34,14 @@ const initialActionState = {
   moveLastPage: () => undefined,
 }
 
-const initialSearchFilterActionState = {
-  filterByText: () => undefined,
-}
+const TodoPaginationContext = createContext<Pagination>(initialState)
+const TodoPaginationActionContext =
+  createContext<PaginationAction>(initialActionState)
 
-const TodoPaginationContext = createContext<Pagination & { text: string }>({
-  ...initialState,
-  text: '',
-})
-const TodoPaginationActionContext = createContext<
-  PaginationAction & SearchFilterAction
->({ ...initialActionState, ...initialSearchFilterActionState })
-
-export const TodoFilterProvider = ({ children }: PropsWithChildren) => {
+export const TodoPaginationProvider = ({ children }: PropsWithChildren) => {
   const todos = useTodoContext()
 
   const [pagination, setPagination] = useState<Pagination>(initialState)
-  const [searchText, setSearchFilter] = useState<string>(
-    getSearchFilterFromStorage() ?? ''
-  )
-
-  const filterByText = (text: string) => {
-    setSearchFilter(text)
-    localStorage.setItem('searchText', text)
-  }
 
   const updateSize = useCallback(
     (size: number) => {
@@ -114,30 +93,27 @@ export const TodoFilterProvider = ({ children }: PropsWithChildren) => {
     }))
   }, [pagination.pageIndex, pagination.size, todos.length])
 
-  const filter: PaginationAction & SearchFilterAction = useMemo(
+  const filter = useMemo(
     () => ({
       updateSize,
       moveNextPage,
       movePrevPage,
       moveFirstPage,
       moveLastPage,
-      filterByText,
     }),
     [moveFirstPage, moveLastPage, updateSize]
   )
 
   return (
     <TodoPaginationActionContext.Provider value={filter}>
-      <TodoPaginationContext.Provider
-        value={{ ...pagination, text: searchText }}
-      >
+      <TodoPaginationContext.Provider value={pagination}>
         {children}
       </TodoPaginationContext.Provider>
     </TodoPaginationActionContext.Provider>
   )
 }
 
-export const useFilteredTodosContext = () => useContext(TodoPaginationContext)
+export const useTodoPaginationContext = () => useContext(TodoPaginationContext)
 
-export const useFilterTodosActionContext = () =>
+export const useTodoPaginationActionContext = () =>
   useContext(TodoPaginationActionContext)

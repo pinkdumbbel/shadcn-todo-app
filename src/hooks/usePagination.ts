@@ -1,9 +1,9 @@
-import { useFilteredTodosContext } from '@/context'
+import { useTodoPaginationContext } from '@/context'
 import { useTodoContext } from '@/server/context'
 
 export const usePagination = () => {
   const todos = useTodoContext()
-  const { pageIndex, size } = useFilteredTodosContext()
+  const { pageIndex, size } = useTodoPaginationContext()
 
   return {
     hasPrevPage: pageIndex > 0,

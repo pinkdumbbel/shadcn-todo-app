@@ -1,4 +1,7 @@
-import { useFilteredTodosContext, useFilterTodosActionContext } from '@/context'
+import {
+  useTodoPaginationContext,
+  useTodoPaginationActionContext,
+} from '@/context'
 import {
   Select,
   SelectContent,
@@ -11,8 +14,8 @@ import {
 const rowsPerPage = ['5', '10', '20']
 
 export const TodoPaginationSizeSelect = () => {
-  const { size } = useFilteredTodosContext()
-  const { updateSize } = useFilterTodosActionContext()
+  const { size } = useTodoPaginationContext()
+  const { updateSize } = useTodoPaginationActionContext()
 
   return (
     <div className="flex gap-x-[8px]">

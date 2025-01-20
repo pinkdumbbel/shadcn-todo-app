@@ -1,11 +1,11 @@
 import * as Pagination from '@/components/ui/pagination'
 import { TodoPaginationSizeSelect } from './TodoPaginationSizeSelect'
-import { useFilteredTodosContext, useTodoRowCheckContext } from '@/context'
+import { useTodoPaginationContext, useTodoRowCheckContext } from '@/context'
 import { TodoPaginationActionButtons } from './TodoPaginationActionButtons'
 import { useFilterTodo } from '@/hooks'
 
 export const TodoPagination = () => {
-  const { pageIndex } = useFilteredTodosContext()
+  const { pageIndex } = useTodoPaginationContext()
   const todoIds = useTodoRowCheckContext()
   const { todos } = useFilterTodo()
 

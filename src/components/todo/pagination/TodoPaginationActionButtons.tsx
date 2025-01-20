@@ -5,12 +5,12 @@ import {
   ChevronsRight,
 } from 'lucide-react'
 import { TodoPaginationItem } from './TodoPaginationItem'
-import { useFilterTodosActionContext } from '@/context'
+import { useTodoPaginationActionContext } from '@/context'
 import { usePagination } from '@/hooks'
 
 export const TodoPaginationActionButtons = () => {
   const { moveNextPage, movePrevPage, moveFirstPage, moveLastPage } =
-    useFilterTodosActionContext()
+    useTodoPaginationActionContext()
   const { isFirstPage, isLastPage, hasNextPage, hasPrevPage } = usePagination()
 
   return (
