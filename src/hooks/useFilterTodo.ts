@@ -1,4 +1,5 @@
-import { useFilteredTodosContext } from '@/context'
+import { useTodoPaginationContext } from '@/context'
+import { useSearchFilterContext } from '@/context/TodoSearchFilterContext'
 import { useTodoContext } from '@/server/context'
 import { ToDo } from '@/types/api'
 import { useEffect, useState } from 'react'
@@ -6,19 +7,33 @@ import { useEffect, useState } from 'react'
 export const useFilterTodo = () => {
   const todos = useTodoContext()
 
-  const { size, pageIndex, text } = useFilteredTodosContext()
+  const searchFilter = useSearchFilterContext()
+  const { size, pageIndex } = useTodoPaginationContext()
 
   const [filteredTodos, setFilteredTodos] = useState<ToDo[]>([])
 
   useEffect(() => {
     const pageCnt = pageIndex * size
+    const { searchText, deadline, done } = searchFilter
 
     setFilteredTodos(
       todos
-        .filter((todo) => todo.text.includes(text))
+        .filter((todo) => todo.text.includes(searchText ?? ''))
+        .filter((todo) => {
+          if (!deadline) return true
+
+          const from = deadline.from?.getTime() ?? 0
+          const to = deadline.to?.getTime() ?? 0
+
+          return todo.deadline >= from && todo.deadline <= to
+        })
+        .filter((todo) => {
+          if (done === undefined) return true
+          return todo.done === done
+        })
         .slice(pageCnt, pageCnt + size)
     )
-  }, [size, todos, pageIndex, text])
+  }, [size, todos, pageIndex, searchFilter])
 
   return {
     todos: filteredTodos,
