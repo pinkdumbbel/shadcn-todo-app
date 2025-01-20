@@ -1,8 +1,8 @@
 import { useTodoPaginationContext } from '@/context'
-import { useTodoContext } from '@/server/context'
+import { useFilterTodo } from './useFilterTodo'
 
 export const usePagination = () => {
-  const todos = useTodoContext()
+  const { todos } = useFilterTodo()
   const { pageIndex, size } = useTodoPaginationContext()
 
   return {

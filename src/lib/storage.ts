@@ -7,10 +7,12 @@ export const getSearchFilterFromStorage = () => {
 
   return {
     searchText: parsedSearchFilter.searchText,
-    deadline: {
-      from: new Date(parsedSearchFilter.deadline.from),
-      to: new Date(parsedSearchFilter.deadline.to),
-    },
+    deadline: parsedSearchFilter.deadline
+      ? {
+          from: new Date(parsedSearchFilter.deadline.from),
+          to: new Date(parsedSearchFilter.deadline.to),
+        }
+      : undefined,
     done: parsedSearchFilter.done,
   }
 }
