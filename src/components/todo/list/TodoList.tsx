@@ -1,7 +1,11 @@
 import { Checkbox } from '@/components/ui/checkbox'
 import { Popover, PopoverTrigger } from '@/components/ui/popover'
 import * as Table from '@/components/ui/table'
-import { yyyymmddMs } from '@/lib/utils'
+import {
+  getDaysUntilDeadline,
+  isDeadlineApproaching,
+  yyyymmddMs,
+} from '@/lib/utils'
 import { PopoverContent } from '@radix-ui/react-popover'
 import { EllipsisVertical } from 'lucide-react'
 import { TodoUpdateDialog } from './TodoUpdateDialog'
@@ -9,6 +13,13 @@ import { memo } from 'react'
 import { TodoDeleteActionButton } from './TodoDeleteActionButton'
 import { useFilterTodo } from '@/hooks'
 import { useTodoRowCheckActionContext, useTodoRowCheckContext } from '@/context'
+import { Info as InfoIcon } from 'lucide-react'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 export const TodoList = () => {
   const { todos } = useFilterTodo()
@@ -43,12 +54,16 @@ export const TodoList = () => {
                   onClick={() => checkTodo(todo.id)}
                 />
               </Table.TableCell>
-              <Table.TableCell className="max-w-[500px] truncate text-[16px] font-medium text-gray-700 ">
+              <Table.TableCell className="text-[16px] font-medium text-gray-700 truncate">
                 {todo.text}({todo.id})
               </Table.TableCell>
-              <Table.TableCell className="w-[20%] text-[16px] font-medium text-gray-700">
-                {yyyymmddMs(todo.deadline)}
-              </Table.TableCell>
+              {isDeadlineApproaching(todo.deadline) ? (
+                <DeadlineApproachCell deadline={todo.deadline} />
+              ) : (
+                <Table.TableCell className="w-[20%] text-[16px] font-medium text-gray-700">
+                  {yyyymmddMs(todo.deadline)}
+                </Table.TableCell>
+              )}
               <Table.TableCell className="w-[10%] text-[16px] font-medium text-gray-700">
                 {todo.done ? 'Y' : 'N'}
               </Table.TableCell>
@@ -84,3 +99,37 @@ const ShowMoreButton = memo(({ id }: { id: number }) => {
     </Popover>
   )
 })
+
+interface DeadlineApproachCellProps {
+  deadline: number
+}
+
+const DeadlineApproachCell = ({ deadline }: DeadlineApproachCellProps) => {
+  const untilDay = getDaysUntilDeadline(deadline)
+
+  return (
+    <Table.TableCell className="w-[20%] text-[16px] font-medium text-red-700">
+      <div className="flex gap-x-[8px] items-center">
+        <TooltipProvider delayDuration={50}>
+          <Tooltip>
+            <TooltipTrigger>
+              <InfoIcon width={20} height={20} className=" stroke-red-700" />
+            </TooltipTrigger>
+            <TooltipContent
+              className="bg-black text-white text-[16px]"
+              side="bottom"
+            >
+              <p>
+                {untilDay >= 0
+                  ? `마감 기한이 ${untilDay}일 남았습니다.`
+                  : '마감 기한이 지났습니다.'}
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <p>{yyyymmddMs(deadline)}</p>
+      </div>
+    </Table.TableCell>
+  )
+}
