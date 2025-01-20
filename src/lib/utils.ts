@@ -26,3 +26,14 @@ export const yyyymmddRange = (date?: DateRange): string => {
 }
 
 export const yyyymmddMs = (date: number) => yyyymmdd(new Date(date))
+
+export const getDaysUntilDeadline = (deadline: number): number => {
+  const now = new Date()
+  now.setHours(0, 0, 0, 0)
+
+  const diffTime = deadline - now.getTime()
+  return Math.floor(diffTime / (1000 * 60 * 60 * 24))
+}
+
+export const isDeadlineApproaching = (deadline: number): boolean =>
+  getDaysUntilDeadline(deadline) <= 3
