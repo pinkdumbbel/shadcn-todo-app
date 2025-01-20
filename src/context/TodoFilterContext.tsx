@@ -1,8 +1,8 @@
+import { getSearchFilterFromStorage } from '@/lib/storage'
 import { useTodoContext } from '@/server/context'
 import {
   createContext,
   PropsWithChildren,
-  startTransition,
   useCallback,
   useContext,
   useMemo,
@@ -55,13 +55,13 @@ export const TodoFilterProvider = ({ children }: PropsWithChildren) => {
   const todos = useTodoContext()
 
   const [pagination, setPagination] = useState<Pagination>(initialState)
-  const [searchText, setSearchFilter] = useState<string>('')
+  const [searchText, setSearchFilter] = useState<string>(
+    getSearchFilterFromStorage() ?? ''
+  )
 
   const filterByText = (text: string) => {
     setSearchFilter(text)
-    startTransition(() => {
-      localStorage.setItem('searchText', text)
-    })
+    localStorage.setItem('searchText', text)
   }
 
   const updateSize = useCallback(

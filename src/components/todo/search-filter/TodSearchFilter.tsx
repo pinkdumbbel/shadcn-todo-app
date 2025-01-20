@@ -1,15 +1,16 @@
 import { Input } from '@/components/ui/input'
-import { useState } from 'react'
-import { useFilterTodosActionContext } from '@/context'
+import { startTransition } from 'react'
+import { useFilteredTodosContext, useFilterTodosActionContext } from '@/context'
 
 export const TodSearchFilter = () => {
   const { filterByText } = useFilterTodosActionContext()
-  const [text, setText] = useState('')
+  const { text } = useFilteredTodosContext()
 
   const onChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
-    setText(value)
-    filterByText(value)
+    startTransition(() => {
+      filterByText(value)
+    })
   }
 
   return (

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 
 export const useFilterTodo = () => {
   const todos = useTodoContext()
+
   const { size, pageIndex, text } = useFilteredTodosContext()
 
   const [filteredTodos, setFilteredTodos] = useState<ToDo[]>([])
@@ -14,8 +15,8 @@ export const useFilterTodo = () => {
 
     setFilteredTodos(
       todos
-        .slice(pageCnt, pageCnt + size)
         .filter((todo) => todo.text.includes(text))
+        .slice(pageCnt, pageCnt + size)
     )
   }, [size, todos, pageIndex, text])
 
