@@ -1,29 +1,40 @@
 import { Input } from '@/components/ui/input'
-import {
-  useSearchFilterActionContext,
-  useSearchFilterContext,
-} from '@/context/TodoSearchFilterContext'
 import { DatePicker } from '../common'
 import { Calendar } from '@/components/ui/calendar'
 import { DateRange } from 'react-day-picker'
 import { Checkbox } from '@/components/ui/checkbox'
+import { useSearchFilterActionContext } from '@/server/context/SearchFilterContext'
+import { useState } from 'react'
+import { getSearchFilterFromStorage } from '@/lib/storage'
 
 export const TodSearchFilter = () => {
-  const { searchText, deadline, done } = useSearchFilterContext()
+  const searchFilter = getSearchFilterFromStorage()
+
+  const [searchText, setSearchText] = useState<string | undefined>(
+    searchFilter.searchText
+  )
+  const [deadline, setDeadline] = useState<DateRange | undefined>(
+    searchFilter.deadline
+  )
+  const [done, setDone] = useState<boolean | undefined>(searchFilter.done)
+
   const { filterBySearchText, filterByDeadline, filterByDone } =
     useSearchFilterActionContext()
 
   const onChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
+    setSearchText(value)
     filterBySearchText(value)
   }
 
   const onChangeDeadline = (date?: DateRange) => {
     filterByDeadline(date)
+    setDeadline(date)
   }
 
   const onChangeDone = (done: boolean) => {
     filterByDone(done)
+    setDone(done)
   }
 
   return (

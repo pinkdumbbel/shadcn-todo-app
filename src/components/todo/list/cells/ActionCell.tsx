@@ -18,24 +18,22 @@ export const ActionCell = ({ id }: ActionCellProps) => (
   </TableCell>
 )
 
-const ShowMoreButton = ({ id }: { id: number }) => {
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <button>
-          <EllipsisVerticalIcon />
-        </button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <ul>
-          <li className="border-b-2 border-solid border-gray-100">
-            <TodoUpdateDialog id={id} />
-          </li>
-          <li>
-            <TodoDeleteActionButton id={id} />
-          </li>
-        </ul>
-      </PopoverContent>
-    </Popover>
-  )
-}
+const ShowMoreButton = ({ id }: { id: number }) => (
+  <Popover>
+    <PopoverTrigger asChild>
+      <button>
+        <EllipsisVerticalIcon />
+      </button>
+    </PopoverTrigger>
+    <PopoverContent className="w-[200px] p-0">
+      <ul>
+        <li className="border-b-2 border-solid border-gray-100">
+          <TodoUpdateDialog id={id} />
+        </li>
+        <li>
+          <TodoDeleteActionButton id={id} />
+        </li>
+      </ul>
+    </PopoverContent>
+  </Popover>
+)

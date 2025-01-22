@@ -5,8 +5,8 @@ import {
   useContext,
   useState,
 } from 'react'
-import { useTodoActionContext } from '@/server/context'
-import { useTodos } from '@/hooks/useTodos'
+import { useFetchedTodoActionContext } from '@/server/context'
+import { useFilteredTodoContext } from '@/server/context/PaginationContext'
 
 interface TodoRowCheck {
   checkTodo: (id: number) => void
@@ -25,8 +25,8 @@ const TodoRowCheckActionContext =
   createContext<TodoRowCheck>(initialActionState)
 
 export const TodoRowCheckProvider = ({ children }: PropsWithChildren) => {
-  const { deleteTodo } = useTodoActionContext()
-  const todos = useTodos()
+  const { deleteTodo } = useFetchedTodoActionContext()
+  const { todos } = useFilteredTodoContext()
   const [todoIds, setTodoIds] = useState<number[]>([])
 
   const checkTodo = useCallback((id: number) => {

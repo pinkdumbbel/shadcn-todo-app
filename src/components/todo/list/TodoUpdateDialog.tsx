@@ -11,10 +11,10 @@ import { Input } from '@/components/ui/input'
 import { DatePicker } from '../common'
 import { Calendar } from '@/components/ui/calendar'
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react'
-import { useTodoActionContext } from '@/server/context'
 import { ToDo } from '@/types/api'
 import { getTodoById } from '@/server'
 import { Checkbox } from '@/components/ui/checkbox'
+import { useFetchedTodoActionContext } from '@/server/context'
 
 interface TodoUpdateDialogProps {
   id: number
@@ -48,7 +48,7 @@ interface UpdateTodoFormProps {
 }
 
 const UpdateTodoForm = ({ id, closeDialog }: UpdateTodoFormProps) => {
-  const { updateTodo } = useTodoActionContext()
+  const { updateTodo } = useFetchedTodoActionContext()
 
   const [todo, setTodo] = useState<ToDo | null>(null)
 

@@ -9,14 +9,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { useTodoActionContext } from '@/server/context'
+import { useFetchedTodoActionContext } from '@/server/context'
 
 interface TodoDeleteActionButtonProps {
   id: number
 }
 
 export const TodoDeleteActionButton = ({ id }: TodoDeleteActionButtonProps) => {
-  const { deleteTodo } = useTodoActionContext()
+  const { deleteTodo } = useFetchedTodoActionContext()
 
   return (
     <AlertDialog>

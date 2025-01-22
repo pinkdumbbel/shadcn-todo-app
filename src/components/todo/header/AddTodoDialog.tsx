@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input'
 import { DatePicker } from '../common'
 import { Calendar } from '@/components/ui/calendar'
 import { FormEvent, useState } from 'react'
-import { useTodoActionContext } from '@/server/context'
+import { useFetchedTodoActionContext } from '@/server/context'
 
 export const AddTodoDialog = () => {
   const [open, setOpen] = useState<boolean>(false)
@@ -44,7 +44,7 @@ interface AddTodoFormProps {
 }
 
 const AddTodoForm = ({ closeDialog }: AddTodoFormProps) => {
-  const { addTodo } = useTodoActionContext()
+  const { addTodo } = useFetchedTodoActionContext()
   const [text, setText] = useState<string>('')
   const [deadline, setDeadline] = useState<Date>()
 
