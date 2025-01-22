@@ -6,7 +6,6 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { useFilteredTodoContext } from '@/server/context/PaginationContext'
 
 const tableRowHeight = 80
-const tableHeaderRowHeight = 60
 
 export const TodoList = () => {
   const { todos, size } = useFilteredTodoContext()
@@ -16,33 +15,31 @@ export const TodoList = () => {
 
   return (
     <section className="mt-[20px] border-[1px] border-solid border-gray-300 rounded-lg">
+      <Table.Table>
+        <Table.TableHeader className="h-[60px]">
+          <Table.TableRow className="hover:bg-transparent">
+            <Table.TableHead className="w-[24px]">
+              <Checkbox
+                className="w-[24px] h-[24px]"
+                checked={todoIds.length > 0 && todos.length === todoIds.length}
+                onClick={checkAllTodo}
+              />
+            </Table.TableHead>
+            <Table.TableHead className="text-[20px]">Todo</Table.TableHead>
+            <Table.TableHead className="text-[20px]">Deadline</Table.TableHead>
+            <Table.TableHead className="text-[20px]">Done</Table.TableHead>
+          </Table.TableRow>
+        </Table.TableHeader>
+      </Table.Table>
+
       <ScrollArea
-        className="max-h-[860px]"
+        className="max-h-[800px]"
         type="always"
         style={{
-          height: `${tableRowHeight * size + tableHeaderRowHeight}px`,
+          height: `${tableRowHeight * size}px`,
         }}
       >
         <Table.Table>
-          <Table.TableHeader className="h-[60px]">
-            <Table.TableRow className="hover:bg-transparent">
-              <Table.TableHead className="w-[24px]">
-                <Checkbox
-                  className="w-[24px] h-[24px]"
-                  checked={
-                    todoIds.length > 0 && todos.length === todoIds.length
-                  }
-                  onClick={checkAllTodo}
-                />
-              </Table.TableHead>
-              <Table.TableHead className="text-[20px]">Todo</Table.TableHead>
-              <Table.TableHead className="text-[20px]">
-                Deadline
-              </Table.TableHead>
-              <Table.TableHead className="text-[20px]">Done</Table.TableHead>
-            </Table.TableRow>
-          </Table.TableHeader>
-
           <Table.TableBody>
             {todos.map((todo) => (
               <Table.TableRow key={todo.id} className="h-[80px]">
