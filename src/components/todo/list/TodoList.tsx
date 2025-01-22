@@ -1,19 +1,31 @@
 import { Checkbox } from '@/components/ui/checkbox'
 import * as Table from '@/components/ui/table'
 
-import { useFilterTodo } from '@/hooks'
-import { useTodoRowCheckActionContext, useTodoRowCheckContext } from '@/context'
+import {
+  useTodoPaginationContext,
+  useTodoRowCheckActionContext,
+  useTodoRowCheckContext,
+} from '@/context'
 import { DeadlineCell, TodoTextCell, DoneCell, ActionCell } from './cells'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { useTodos } from '@/hooks/useTodos'
+
+const tableRowHeight = 80
+const tableHeaderRowHeight = 60
 
 export const TodoList = () => {
-  const { todos } = useFilterTodo()
+  const todos = useTodos()
   const todoIds = useTodoRowCheckContext()
   const { checkAllTodo, checkTodo } = useTodoRowCheckActionContext()
+  const { size } = useTodoPaginationContext()
 
   return (
     <section className="mt-[20px] border-[1px] border-solid border-gray-300 rounded-lg">
-      <ScrollArea className="h-[860px]" type="always">
+      <ScrollArea
+        className="max-h-[860px]"
+        type="always"
+        style={{ height: `${tableRowHeight * size + tableHeaderRowHeight}px` }}
+      >
         <Table.Table>
           <Table.TableHeader className="h-[60px]">
             <Table.TableRow className="hover:bg-transparent">

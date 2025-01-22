@@ -2,12 +2,12 @@ import * as Pagination from '@/components/ui/pagination'
 import { TodoPaginationSizeSelect } from './TodoPaginationSizeSelect'
 import { useTodoPaginationContext, useTodoRowCheckContext } from '@/context'
 import { TodoPaginationActionButtons } from './TodoPaginationActionButtons'
-import { useFilterTodo } from '@/hooks'
+import { useTodos } from '@/hooks/useTodos'
 
 export const TodoPagination = () => {
   const { pageIndex } = useTodoPaginationContext()
   const todoIds = useTodoRowCheckContext()
-  const { todos } = useFilterTodo()
+  const todos = useTodos()
 
   return (
     <Pagination.Pagination className="mt-[20px] justify-between items-center">
