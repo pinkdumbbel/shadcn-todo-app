@@ -13,7 +13,6 @@ export const useFilterTodo = () => {
   const [filteredTodos, setFilteredTodos] = useState<ToDo[]>([])
 
   useEffect(() => {
-    const pageCnt = pageIndex * size
     const { searchText, deadline, done } = searchFilter
 
     setFilteredTodos(
@@ -31,7 +30,6 @@ export const useFilterTodo = () => {
           if (done === undefined) return true
           return todo.done === done
         })
-        .slice(pageCnt, pageCnt + size)
     )
   }, [size, todos, pageIndex, searchFilter])
 

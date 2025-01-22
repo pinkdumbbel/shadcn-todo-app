@@ -6,6 +6,7 @@ export const usePagination = () => {
   const { pageIndex, size } = useTodoPaginationContext()
 
   return {
+    todos: todos.slice(pageIndex * size, pageIndex * size + size),
     hasPrevPage: pageIndex > 0,
     hasNextPage: pageIndex * size + size < todos.length,
     isFirstPage: !pageIndex,
