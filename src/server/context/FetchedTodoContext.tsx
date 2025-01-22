@@ -36,7 +36,7 @@ export const FetchedTodoProvider = ({ children }: PropsWithChildren) => {
       ...payload,
       done: false,
     })
-    setTodos((prevTodos) => [...prevTodos, newTodo])
+    setTodos((prevTodos) => [newTodo, ...prevTodos])
   }
 
   const updateTodo = async (payload: ToDo): Promise<ToDo> => {
