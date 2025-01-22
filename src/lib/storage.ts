@@ -1,4 +1,10 @@
-export const getSearchFilterFromStorage = () => {
+import { DateRange } from 'react-day-picker'
+
+export const getSearchFilterFromStorage = (): {
+  searchText?: string
+  deadline?: DateRange
+  done?: boolean
+} => {
   const searchFilter = localStorage.getItem('searchFilter')
 
   if (!searchFilter) return {}
