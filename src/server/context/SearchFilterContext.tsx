@@ -22,6 +22,7 @@ interface SearchFilterAction {
   filterBySearchText: (text: string) => void
   filterByDeadline: (deadline?: DateRange) => void
   filterByDone: (done: boolean) => void
+  resetSearchFilter: () => void
 }
 
 const SearchFilterContext = createContext<ToDo[]>([])
@@ -29,6 +30,7 @@ const SearchFilterActionContext = createContext<SearchFilterAction>({
   filterBySearchText: () => undefined,
   filterByDeadline: () => undefined,
   filterByDone: () => undefined,
+  resetSearchFilter: () => undefined,
 })
 
 const searchFilterKey = 'searchFilter'
@@ -104,10 +106,16 @@ export const SearchFilterProvider = ({ children }: PropsWithChildren) => {
     [searchFilter]
   )
 
+  const resetSearchFilter = () => {
+    setSearchFilter({})
+    localStorage.removeItem(searchFilterKey)
+  }
+
   const updater = {
     filterBySearchText,
     filterByDone,
     filterByDeadline,
+    resetSearchFilter,
   }
 
   return (

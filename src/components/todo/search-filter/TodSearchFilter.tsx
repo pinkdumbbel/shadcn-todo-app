@@ -6,6 +6,8 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { useSearchFilterActionContext } from '@/server/context/SearchFilterContext'
 import { useState } from 'react'
 import { getSearchFilterFromStorage } from '@/lib/storage'
+import { Button } from '@/components/ui/button'
+import { RotateCw as RotateCwIcon } from 'lucide-react'
 
 export const TodSearchFilter = () => {
   const searchFilter = getSearchFilterFromStorage()
@@ -18,8 +20,12 @@ export const TodSearchFilter = () => {
   )
   const [done, setDone] = useState<boolean | undefined>(searchFilter.done)
 
-  const { filterBySearchText, filterByDeadline, filterByDone } =
-    useSearchFilterActionContext()
+  const {
+    filterBySearchText,
+    filterByDeadline,
+    filterByDone,
+    resetSearchFilter,
+  } = useSearchFilterActionContext()
 
   const onChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
@@ -37,38 +43,56 @@ export const TodSearchFilter = () => {
     setDone(done)
   }
 
-  return (
-    <section className="flex items-center gap-x-[12px] mt-[40px]">
-      <Input
-        value={searchText}
-        placeholder="Filter todos..."
-        className="w-[480px] h-[48px]"
-        onChange={onChangeText}
-      />
+  const onReset = () => {
+    setSearchText(undefined)
+    setDeadline(undefined)
+    setDone(undefined)
 
-      <div className="w-[240px]">
-        <DatePicker placeholder="Filter deadline..." date={deadline}>
-          <Calendar
-            initialFocus
-            mode="range"
-            defaultMonth={deadline?.from}
-            selected={deadline}
-            onSelect={onChangeDeadline}
-            numberOfMonths={2}
-          />
-        </DatePicker>
+    resetSearchFilter()
+  }
+
+  return (
+    <section className="flex justify-between mt-[40px]">
+      <div className="flex items-center gap-x-[12px] ">
+        <Input
+          value={searchText ?? ''}
+          placeholder="Filter todos..."
+          className="w-[480px] h-[48px]"
+          onChange={onChangeText}
+        />
+
+        <div className="w-[240px]">
+          <DatePicker placeholder="Filter deadline..." date={deadline}>
+            <Calendar
+              initialFocus
+              mode="range"
+              defaultMonth={deadline?.from}
+              selected={deadline}
+              onSelect={onChangeDeadline}
+              numberOfMonths={2}
+            />
+          </DatePicker>
+        </div>
+
+        <Checkbox
+          id="done"
+          className="w-[24px] h-[24px]"
+          onCheckedChange={onChangeDone}
+          checked={!!done}
+        />
+
+        <label htmlFor="done" className="text-[16px] text-gray-700">
+          Done
+        </label>
       </div>
 
-      <Checkbox
-        id="done"
-        className="w-[24px] h-[24px]"
-        onCheckedChange={onChangeDone}
-        checked={done}
-      />
-
-      <label htmlFor="done" className="text-[16px] text-gray-700">
-        Done
-      </label>
+      <Button
+        size="icon"
+        className="bg-white hover:bg-gray-100"
+        onClick={onReset}
+      >
+        <RotateCwIcon className="stroke-black" />
+      </Button>
     </section>
   )
 }
