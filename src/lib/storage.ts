@@ -1,18 +1,18 @@
 import { DateRange } from 'react-day-picker'
 
 export const getSearchFilterFromStorage = (): {
-  searchText?: string
+  text?: string
   deadline?: DateRange
   done?: boolean
 } => {
-  const searchFilter = localStorage.getItem('searchFilter')
+  const searchFilter = localStorage.getItem('searchParams')
 
   if (!searchFilter) return {}
 
   const parsedSearchFilter = JSON.parse(searchFilter)
 
   return {
-    searchText: parsedSearchFilter.searchText,
+    text: parsedSearchFilter.searchText,
     deadline: parsedSearchFilter.deadline
       ? {
           from: new Date(parsedSearchFilter.deadline.from),

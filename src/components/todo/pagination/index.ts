@@ -1,1 +1,1 @@
-export * from './TodoPagination'
+export * from './Pagination'

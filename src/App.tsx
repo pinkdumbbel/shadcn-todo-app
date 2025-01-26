@@ -1,22 +1,8 @@
-import { TodoHeader } from './components/todo/header'
-import { TodSearchFilter } from './components/todo/search-filter'
-import { TodoList } from './components/todo/list'
-import { TodoPagination } from './components/todo/pagination'
-import { TodoContextProvider } from '@/server/context'
-import { TodoRowCheckProvider } from './context'
+import { TodoList } from './components/todo/TodoList'
 
 const App = () => (
   <main className="w-screen h-screen flex justify-center items-center">
-    <article className="w-[60%] flex flex-col p-[40px] border-[1px] border-solid border-gray-300 rounded-xl shadow-xl">
-      <TodoContextProvider>
-        <TodoRowCheckProvider>
-          <TodoHeader />
-          <TodSearchFilter />
-          <TodoList />
-          <TodoPagination />
-        </TodoRowCheckProvider>
-      </TodoContextProvider>
-    </article>
+    <TodoList />
   </main>
 )
 

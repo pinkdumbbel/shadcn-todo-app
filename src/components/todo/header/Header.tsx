@@ -12,7 +12,7 @@ import { AddTodoDialog } from './AddTodoDialog'
 import { Button } from '@/components/ui/button'
 import { useTodoRowCheckActionContext, useTodoRowCheckContext } from '@/context'
 
-export const TodoHeader = () => (
+export const Header = () => (
   <header className="flex justify-between">
     <h1 className="text-3xl font-bold">Todo List</h1>
     <div className="flex gap-x-[8px]">

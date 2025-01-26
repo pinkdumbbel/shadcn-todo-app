@@ -3,26 +3,21 @@ import * as Table from '@/components/ui/table'
 import { useTodoRowCheckActionContext, useTodoRowCheckContext } from '@/context'
 import { DeadlineCell, TodoTextCell, DoneCell, ActionCell } from './cells'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { useFilteredTodoContext } from '@/server/context/PaginationContext'
+import { useTodos } from '@/hooks/useTodos'
+import { ToDoSearchFilterParams } from '@/types/todo'
+interface ListProps {
+  searchFilterParams: Partial<ToDoSearchFilterParams>
+}
 
-const tableRowHeight = 80
-const tableHeaderHeight = 60
-
-export const TodoList = () => {
-  const { todos, size } = useFilteredTodoContext()
+export const List = ({ searchFilterParams }: ListProps) => {
+  const { todos } = useTodos(searchFilterParams)
 
   const todoIds = useTodoRowCheckContext()
   const { checkAllTodo, checkTodo } = useTodoRowCheckActionContext()
 
   return (
     <section className="mt-[20px] border-[1px] border-solid border-gray-300 rounded-lg">
-      <ScrollArea
-        className="max-h-[860px]"
-        type="always"
-        style={{
-          height: `${tableRowHeight * size + tableHeaderHeight}px`,
-        }}
-      >
+      <ScrollArea className="max-h-[80%]" type="always">
         <Table.Table>
           <Table.TableHeader className="h-[60px]">
             <Table.TableRow className="hover:bg-transparent">
